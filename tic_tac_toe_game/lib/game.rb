@@ -23,7 +23,7 @@ class Game
       player_turn(selected_player)
       @turn += 1
 
-      return selected_player.print_win if player_win?(selected_player.symbol)
+      return selected_player.print_win if @game_board.winner?(selected_player.symbol)
     end
   end
 
@@ -39,22 +39,6 @@ class Game
       print_turn_error(valid_update[:errors]) unless valid_update[:success]
       player_turn(player)
     end
-  end
-
-  def player_win?(player_symbol)
-    board = @game_board.board
-    # rows
-    return true if board.any? { |board_row| board_row.all? { |row_cell| row_cell == player_symbol } }
-    # columns
-    return true if (0..2).any? { |board_column| board.all? { |row| row[board_column] == player_symbol } }
-
-    # diagonals
-    return true if [
-      [board[0][0], board[1][1], board[2][2]],
-      [board[0][2], board[1][1], board[2][0]]
-    ].any? { |diagonal| diagonal.all?(player_symbol) }
-
-    false
   end
 
   def print_turn_error(errors)
